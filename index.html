@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>File Upload & Download Dashboard</title>
+<style>
+  body{
+    margin:0;
+    font-family:Segoe UI,system-ui;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    background:linear-gradient(135deg,#4facfe,#00f2fe,#43e97b,#fa709a);
+    background-size:400% 400%;
+    animation:bgMove 12s infinite;
+  }
+  @keyframes bgMove {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  .card{
+    background:white;
+    width:420px;
+    padding:25px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,0.15);
+  }
+
+  .title{
+    font-size:26px;
+    font-weight:700;
+    margin:0;
+    color:#111;
+  }
+
+  .subtitle{
+    margin-top:4px;
+    font-size:14px;
+    font-weight:600;
+    color:#444;
+    opacity:0.85;
+  }
+
+  h2{
+    margin-top:18px;
+    color:#333;
+    font-weight:600;
+  }
+
+  input[type=file]{
+    margin:15px 0;
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    width:100%;
+  }
+
+  .btn{
+    background:#007bff;
+    color:white;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    border:0;
+    margin-top:10px;
+  }
+
+  .list{
+    margin-top:20px;
+    text-align:left;
+    max-height:200px;
+    overflow-y:auto;
+  }
+
+  .file-item{
+    padding:8px 10px;
+    background:#f4f7ff;
+    border-radius:6px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .download-btn{
+    background:#28a745;
+    color:white;
+    padding:5px 10px;
+    border-radius:6px;
+    border:0;
+    cursor:pointer;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="title">Parul University</div>
+  <div class="subtitle">Developed by Amarjeet Sharma</div>
+
+  <h2>Upload & Download Dashboard</h2>
+
+  <input type="file" id="fileInput" />
+  <button class="btn" onclick="uploadFile()">Upload File</button>
+
+  <div class="list" id="fileList"></div>
+</div>
+
+<script>
+  let uploadedFiles = [];
+
+  function uploadFile(){
+    const file = document.getElementById("fileInput").files[0];
+    if(!file){
+      alert("Please select a file first.");
+      return;
+    }
+    uploadedFiles.push(file);
+    updateList();
+    alert("File uploaded: " + file.name);
+  }
+
+  function updateList(){
+    const list = document.getElementById("fileList");
+    list.innerHTML="";
+
+    uploadedFiles.forEach((file, index)=>{
+      const item = document.createElement("div");
+      item.className = "file-item";
+      item.innerHTML = `
+        <span>${file.name}</span>
+        <button class="download-btn" onclick="downloadFile(${index})">Download</button>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  function downloadFile(index){
+    const file = uploadedFiles[index];
+    const url = URL.createObjectURL(file);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name;
+    a.click();
+  }
+</script>
+
+</body>
+</html>
